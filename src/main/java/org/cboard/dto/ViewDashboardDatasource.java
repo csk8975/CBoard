@@ -3,6 +3,7 @@ package org.cboard.dto;
 import com.alibaba.fastjson.JSONObject;
 import org.cboard.pojo.DashboardDatasource;
 import com.google.common.base.Function;
+import org.cboard.services.role.RolePermission;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -17,6 +18,12 @@ public class ViewDashboardDatasource {
     private String name;
     private String type;
     private Map<String, Object> config;
+    private boolean edit;
+    private boolean delete;
+    private String userName;
+    private String loginName;
+    private String createTime;
+    private String updateTime;
 
     public static final Function TO = new Function<DashboardDatasource, ViewDashboardDatasource>() {
         @Nullable
@@ -32,6 +39,28 @@ public class ViewDashboardDatasource {
         this.name = datasource.getName();
         this.type = datasource.getType();
         this.config = JSONObject.parseObject(datasource.getConfig());
+        this.edit = RolePermission.isEdit(datasource.getPermission());
+        this.delete = RolePermission.isDelete(datasource.getPermission());
+        this.userName = datasource.getUserName();
+        this.loginName = datasource.getLoginName();
+        this.createTime = datasource.getCreateTime().toString();
+        this.updateTime = datasource.getUpdateTime().toString();
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 
     public Long getId() {
@@ -72,5 +101,37 @@ public class ViewDashboardDatasource {
 
     public void setConfig(Map<String, Object> config) {
         this.config = config;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

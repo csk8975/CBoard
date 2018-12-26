@@ -14,7 +14,11 @@ public interface DatasetDao {
 
     List<String> getCategoryList();
 
+    List<DashboardDataset> getAllDatasetList();
+
     List<DashboardDataset> getDatasetList(String userId);
+
+    List<DashboardDataset> getDatasetListAdmin(String userId);
 
     int save(DashboardDataset dataset);
 
@@ -26,6 +30,6 @@ public interface DatasetDao {
 
     DashboardDataset getDataset(Long id);
 
-    long checkDatasetRole(String userId, Long widgetId);
+    long checkDatasetRole(String userId, Long widgetId, String permissionPattern);
 
 }

@@ -14,6 +14,8 @@ import java.util.Map;
 public interface UserDao {
     int save(DashboardUser user);
 
+    int deleteUserById(String userId);
+
     List<DashboardUser> getUserList();
 
     int update(DashboardUser user);
@@ -31,4 +33,7 @@ public interface UserDao {
     int updateUserPassword(String userId, String passowrd, String newPassword);
 
     int deleteUserRoleByRoleId(String roleId);
+
+    int deleteUserRoles(Map<String, Object> param);
+
 }

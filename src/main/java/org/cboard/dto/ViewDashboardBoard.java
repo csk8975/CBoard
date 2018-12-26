@@ -3,6 +3,7 @@ package org.cboard.dto;
 import com.alibaba.fastjson.JSONObject;
 import org.cboard.pojo.DashboardBoard;
 import com.google.common.base.Function;
+import org.cboard.services.role.RolePermission;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -16,8 +17,14 @@ public class ViewDashboardBoard {
     private String userId;
     private Long categoryId;
     private String name;
+    private String userName;
+    private String loginName;
+    private String createTime;
+    private String updateTime;
     private Map<String, Object> layout;
     private String categoryName;
+    private boolean edit;
+    private boolean delete;
 
     public static final Function TO = new Function<DashboardBoard, ViewDashboardBoard>() {
         @Nullable
@@ -32,8 +39,30 @@ public class ViewDashboardBoard {
         this.userId = board.getUserId();
         this.categoryId = board.getCategoryId();
         this.name = board.getName();
+        this.userName = board.getUserName();
+        this.loginName = board.getLoginName();
+        this.createTime = board.getCreateTime().toString();
+        this.updateTime = board.getUpdateTime().toString();
         this.layout = JSONObject.parseObject(board.getLayout());
         this.categoryName = board.getCategoryName();
+        this.edit = RolePermission.isEdit(board.getPermission());
+        this.delete = RolePermission.isDelete(board.getPermission());
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 
     public Long getId() {
@@ -58,6 +87,38 @@ public class ViewDashboardBoard {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Map<String, Object> getLayout() {

@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS cboard;
+CREATE DATABASE cboard CHARACTER SET utf8;
+USE cboard;
+
 CREATE TABLE dashboard_board (
   board_id bigint(20) NOT NULL AUTO_INCREMENT,
   user_id varchar(50) NOT NULL,
@@ -72,5 +76,72 @@ CREATE TABLE dashboard_role_res (
   role_id varchar(100) DEFAULT NULL,
   res_type varchar(100) DEFAULT NULL,
   res_id bigint(20) DEFAULT NULL,
+  permission varchar(20) DEFAULT NULL,
   PRIMARY KEY (role_res_id)
 );
+
+CREATE TABLE dashboard_job (
+  job_id bigint(20) NOT NULL AUTO_INCREMENT,
+  job_name varchar(200) DEFAULT NULL,
+  cron_exp varchar(200) DEFAULT NULL,
+  start_date timestamp NULL DEFAULT NULL,
+  end_date timestamp NULL DEFAULT NULL,
+  job_type varchar(200) DEFAULT NULL,
+  job_config text,
+  user_id varchar(100) DEFAULT NULL,
+  last_exec_time timestamp NULL DEFAULT NULL,
+  job_status bigint(20),
+  exec_log text,
+  PRIMARY KEY (job_id)
+);
+
+CREATE TABLE dashboard_board_param (
+  board_param_id bigint(20) NOT NULL AUTO_INCREMENT,
+  user_id varchar(50) NOT NULL,
+  board_id bigint(20) NOT NULL,
+  config text,
+  PRIMARY KEY (board_param_id)
+);
+
+CREATE TABLE dashboard_homepage (
+  board_id bigint(20) NOT NULL,
+  user_id varchar(50) NOT NULL,
+  PRIMARY KEY (board_id, user_id)
+);
+
+-- 升级0.4需要执行的
+ALTER TABLE dashboard_dataset ADD create_time TIMESTAMP DEFAULT now();
+ALTER TABLE dashboard_dataset ADD update_time TIMESTAMP;
+UPDATE dashboard_dataset SET update_time = create_time;
+-- Use trigger set update time
+CREATE TRIGGER insert_dataset_update_time_trigger
+BEFORE INSERT ON dashboard_dataset FOR EACH ROW SET new.update_time = now();
+CREATE TRIGGER update_dataset_update_time_trigger
+BEFORE UPDATE ON dashboard_dataset FOR EACH ROW SET new.update_time = now();
+
+ALTER TABLE dashboard_datasource ADD create_time TIMESTAMP DEFAULT now();
+ALTER TABLE dashboard_datasource ADD update_time TIMESTAMP;
+UPDATE dashboard_datasource SET update_time = create_time;
+-- Use trigger set update time
+CREATE TRIGGER insert_datasource_update_time_trigger
+BEFORE INSERT ON dashboard_datasource FOR EACH ROW SET new.update_time = now();
+CREATE TRIGGER update_datasource_update_time_trigger
+BEFORE UPDATE ON dashboard_datasource FOR EACH ROW SET new.update_time = now();
+
+ALTER TABLE dashboard_widget ADD create_time TIMESTAMP DEFAULT now();
+ALTER TABLE dashboard_widget ADD update_time TIMESTAMP;
+UPDATE dashboard_widget SET update_time = create_time;
+-- Use trigger set update time
+CREATE TRIGGER insert_widget_update_time_trigger
+BEFORE INSERT ON dashboard_widget FOR EACH ROW SET new.update_time = now();
+CREATE TRIGGER update_widget_update_time_trigger
+BEFORE UPDATE ON dashboard_widget FOR EACH ROW SET new.update_time = now();
+
+ALTER TABLE dashboard_board ADD create_time TIMESTAMP DEFAULT now();
+ALTER TABLE dashboard_board ADD update_time TIMESTAMP;
+UPDATE dashboard_board SET update_time = create_time;
+-- Use trigger set update time
+CREATE TRIGGER insert_board_update_time_trigger
+BEFORE INSERT ON dashboard_board FOR EACH ROW SET new.update_time = now();
+CREATE TRIGGER update_board_update_time_trigger
+BEFORE UPDATE ON dashboard_board FOR EACH ROW SET new.update_time = now();

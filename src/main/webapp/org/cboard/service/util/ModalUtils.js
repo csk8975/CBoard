@@ -14,7 +14,14 @@ cBoard.service('ModalUtils', function ($uibModal, $filter) {
             windowClass: style,
             size: size,
             controller: function ($scope, $uibModalInstance) {
-                content ? $scope.content = content : $scope.content = 'There is something wrong.';
+                var emptyBody = translate('CONFIG.DASHBOARD.DASHBOARD_SOMETHING_WRONG');
+                if (content instanceof Object) {
+                    content.title ? $scope.title = content.title : $scope.title = translate('COMMON.TIP');
+                    $scope.content = content.body ? content.body : emptyBody;
+                } else {
+                    $scope.title = translate('COMMON.TIP');
+                    $scope.content = content ? content : emptyBody;
+                }
                 $scope.ok = function () {
                     $uibModalInstance.close();
                     if (callback) {
@@ -33,7 +40,7 @@ cBoard.service('ModalUtils', function ($uibModal, $filter) {
             windowClass: style,
             size: size,
             controller: function ($scope, $uibModalInstance) {
-                content ? $scope.content = content : $scope.content = 'There is something wrong.';
+                content ? $scope.content = content : $scope.content = translate('CONFIG.DASHBOARD.DASHBOARD_SOMETHING_WRONG');
                 $scope.ok = function () {
                     $uibModalInstance.close();
                     if (ok) {
@@ -50,4 +57,28 @@ cBoard.service('ModalUtils', function ($uibModal, $filter) {
         });
     };
 
+    this.info = function (content, style, size, ok, close) {
+        $uibModal.open({
+            templateUrl: 'org/cboard/view/util/modal/information.html',
+            windowTemplateUrl: 'org/cboard/view/util/modal/window.html',
+            backdrop: false,
+            windowClass: style,
+            size: size,
+            controller: function ($scope, $uibModalInstance) {
+                content ? $scope.content = content : $scope.content = translate('CONFIG.DASHBOARD.DASHBOARD_SOMETHING_WRONG');
+                $scope.ok = function () {
+                    $uibModalInstance.close();
+                    if (ok) {
+                        ok();
+                    }
+                };
+                $scope.close = function () {
+                    $uibModalInstance.close();
+                    if (close) {
+                        close();
+                    }
+                };
+            }
+        });
+    };
 });
